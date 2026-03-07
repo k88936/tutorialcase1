@@ -134,7 +134,10 @@ def get_post_detail(post_id):
             .first()
         )
 
-        reply_list = (
+        if post is None:
+            return None, "not_found"
+
+        reply_list = list(
             Reply.objects.filter(post_id=post_id)
             .values(
                 "id",
@@ -149,16 +152,14 @@ def get_post_detail(post_id):
             .order_by("created")
         )
 
-        reply_list = list(reply_list)
-
         for reply in reply_list:
             reply["replyId"] = reply["replyId"] if reply["replyId"] else 0
 
         post["reply"] = reply_list
-        return post, True
+        return post, "ok"
     except Exception as e:
         print(e)
-        return None, False
+        return None, "error"
 
 
 def create_reply(content, user_id, post_id, reply_id=0):

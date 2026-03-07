@@ -274,12 +274,15 @@ class PostDetailView(APIView):
     @login_required
     def get(self, request, postId, *args, **kwargs):
         detail, result = controllers.get_post_detail(postId)
-        if result:
+        if result == "ok":
             return Response(detail, status=status.HTTP_200_OK)
-        else:
+        if result == "not_found":
             return Response(
-                {"message": "error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"message": "not found"}, status=status.HTTP_404_NOT_FOUND
             )
+        return Response(
+            {"message": "error"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
 
     @extend_schema(
         parameters=[
