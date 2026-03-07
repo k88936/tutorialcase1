@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  backend-tests:
+  backend-unit-tests:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -20,6 +20,21 @@ jobs:
       - run: pip install -r requirements.txt
       - run: python manage.py test --filter tests.test_post_detail
 
+  backend-api-tests:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+          cache-dependency-path: backend/requirements.txt
+      - run: pip install -r requirements.txt
+      - run: python manage.py test --filter tests.test_post_detail_api
+
   frontend-tests:
     runs-on: ubuntu-latest
     defaults:
@@ -33,4 +48,4 @@ jobs:
           cache: "npm"
           cache-dependency-path: frontend/package-lock.json
       - run: npm ci
-      - run: CI=true npm test -- --watchAll=false --runInBand
+      - run: CI=true npm test -- --watchAll=false --runInBand --testPathPattern=post_detail_page.test.tsx

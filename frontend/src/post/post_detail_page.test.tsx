@@ -16,7 +16,7 @@ jest.mock("../rich_text/markdown_view", () => ({
     MarkdownView: ({ source }: { source: string }) => <div>{source}</div>,
 }));
 
-function renderPostPage(postId: string) {
+function renderPostPage(postId: string, historyPush = jest.fn()) {
     const store = configureStore({
         reducer: {
             user: userSlice.reducer,
@@ -24,17 +24,19 @@ function renderPostPage(postId: string) {
         },
     });
 
-    return render(
+    render(
         <Provider store={store}>
             <MemoryRouter>
                 <PostPage
                     match={{ params: { postId } }}
                     location={{ search: "" }}
-                    history={{ push: jest.fn(), goBack: jest.fn() }}
+                    history={{ push: historyPush, goBack: jest.fn() }}
                 />
             </MemoryRouter>
         </Provider>
     );
+
+    return { historyPush };
 }
 
 describe("PostPage", () => {
@@ -76,5 +78,18 @@ describe("PostPage", () => {
         renderPostPage("999");
 
         expect(await screen.findByText("not found")).toBeTruthy();
+    });
+
+    test("redirects to home when unauthorized", async () => {
+        mockedPost.mockResolvedValue({
+            success: false,
+            authorized: false,
+            message: "User must be authorized.",
+        });
+
+        const { historyPush } = renderPostPage("1");
+
+        expect(await screen.findByText("User must be authorized.")).toBeTruthy();
+        expect(historyPush).toHaveBeenCalledWith("/");
     });
 });
