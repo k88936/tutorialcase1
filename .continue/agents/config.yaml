@@ -1,0 +1,33 @@
+name: Fullstack Tutorial Agent
+version: 1.0.0
+schema: v1
+
+models:
+  - name: "Course Agent"
+    provider: openrouter
+    model: anthropic/claude-sonnet-4.5
+    apiKey: ${{ secrets.OPENROUTER_API_KEY }}
+    roles:
+      - chat
+      - edit
+      - apply
+    capabilities:
+      - tool_use
+
+rules:
+  - uses: file://.continue/rules/01-role.md
+  - uses: file://.continue/rules/02-teaching-style.md
+  - uses: file://.continue/rules/03-course-context.md
+
+prompts:
+  - uses: file://.continue/prompts/course.md
+  - uses: file://.continue/prompts/next.md
+  - uses: file://.continue/prompts/check.md
+  - uses: file://.continue/prompts/explain.md
+  - uses: file://.continue/prompts/solution.md
+  - uses: file://.continue/prompts/task1-backend.md
+  - uses: file://.continue/prompts/task2-frontend.md
+  - uses: file://.continue/prompts/task3-integration.md
+  - uses: file://.continue/prompts/task4-unit-test.md
+  - uses: file://.continue/prompts/task5-api-test.md
+  - uses: file://.continue/prompts/task6-ci.md
