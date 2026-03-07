@@ -49,7 +49,7 @@ def main() -> None:
             },
         ],
         "suggested_commands": [
-            "cd backend && python manage.py test tests.test_post_detail",
+            "cd backend && python manage.py test --filter tests.test_post_detail",
             "cd frontend && CI=true npm test -- --watchAll=false --runInBand",
         ],
     }

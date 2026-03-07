@@ -18,7 +18,7 @@ jobs:
           cache: "pip"
           cache-dependency-path: backend/requirements.txt
       - run: pip install -r requirements.txt
-      - run: python manage.py test tests.test_post_detail
+      - run: python manage.py test --filter tests.test_post_detail
 
   frontend-tests:
     runs-on: ubuntu-latest
