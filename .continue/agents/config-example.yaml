@@ -5,9 +5,11 @@ schema: v1
 models:
   - name: "Course Agent"
     provider: openai
+# Replace MODEL_NAME, BASE_URL, and API_KEY here with your own ones.
     model: MODEL_NAME
-    apiBase: API_BASE_URL
+    apiBase: BASE_URL
     apiKey: API_KEY 
+
     roles:
       - chat
       - edit
